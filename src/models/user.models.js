@@ -52,6 +52,10 @@ const userSchema = new Schema(
     }
 )
 
+
+//it protects user passwords automatically and prevents serious security bugs
+//Passwords are hashed automatically ✅
+//Even developers can’t see real passwords ✅
 userSchema.pre("save", async function (next) {
     if(!this.isModified("password")) return next();
 
@@ -59,10 +63,18 @@ userSchema.pre("save", async function (next) {
     next()
 })
 
+
+//password → plain password from login form
+//this.password → hashed password stored in MongoDB
+//It lets you check a password without ever revealing or storing the real password.
 userSchema.methods.isPasswordCorrect = async function(password){
     return await bcrypt.compare(password, this.password)
 }
 
+
+//Access Token	API authorization	Short (minutes)
+//No DB lookup on every request
+//Avoid asking for username/password again
 userSchema.methods.generateAccessToken = function(){
     return jwt.sign(
         {
@@ -77,6 +89,11 @@ userSchema.methods.generateAccessToken = function(){
         }
     )
 }
+
+
+//Refresh Token	Get new access tokens	Long (days/weeks)
+//Keeps users logged in without re-login
+//Used only to get new access tokens
 userSchema.methods.generateRefreshToken = function(){
     return jwt.sign(
         {

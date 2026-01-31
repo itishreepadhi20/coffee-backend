@@ -42,6 +42,11 @@ const videoSchema = new Schema(
     }
 )
 
+
+
+
+//A plugin is a reusable piece of code that adds functionality to the schema.
+//It adds pagination support for Mongoose aggregation queries.
 videoSchema.plugin(mongooseAggregatePaginate)
 
 export const Video = mongoose.model("Video", videoSchema)

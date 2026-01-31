@@ -15,4 +15,4 @@ const connectDB = async()=>{  //async is used bcz db is always in another contin
     }
 }
 
-export default connectDB
+export default connectDB 
